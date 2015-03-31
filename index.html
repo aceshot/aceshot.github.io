@@ -159,11 +159,50 @@
 <li>私有静态成员类通常用来代表外围类的一个对象组件。</li>
 <li>匿名类的主要用法有创建函数对象，创建过程对象（thread，timetask），在一个静态工厂内部</li>
 </ol>
+<h3 id="方法">方法</h3><ol>
+<li>谨慎的使用重载。重载是静态分派，覆写是动态的。</li>
+</ol>
+<h3 id="返回零长度的数组而不是null。零长度的数组是非可变的">返回零长度的数组而不是null。零长度的数组是非可变的</h3><h3 id="了解字符串连接的性能">了解字符串连接的性能</h3><ol>
+<li>使用stringbuffer替代string+操作</li>
+</ol>
+<h3 id="谨慎的使用本地方法">谨慎的使用本地方法</h3><ol>
+<li>jdk低版本时或许使用本地方法可以提高速度、性能，但1.3以上，jvm的优化已经做的很好了，使用java方法不必native差，相反调用native方法可能会导致不安全，毕竟语言不受jvm控制。</li>
+</ol>
+<h2 id="异常">异常</h2><h3 id="对于可恢复的条件使用被检查的异常，对于程序错误使用运行时异常">对于可恢复的条件使用被检查的异常，对于程序错误使用运行时异常</h3><h3 id="避免不必要的被检查异常">避免不必要的被检查异常</h3><ol>
+<li>如果一个方法只抛出一个被检查异常，那么每个可能存在异常的方法都需要加try-catch块，很麻烦。解决的技术之一：把这个要抛出异常的方法分成两个方法，一个返回boolean，表明是否应该抛出异常。另一个调用第一个方法检测，检测通过或不通过分别给予不同的处理。</li>
+</ol>
+<h3 id="努力使失败保持原子性">努力使失败保持原子性</h3><ol>
+<li>一个失败的方法调用应该使对象保持“它在被调用之前的状态”</li>
+</ol>
+<h2 id="线程">线程</h2><h3 id="对共享可变数据的同步访问">对共享可变数据的同步访问</h3><ol>
+<li>为了安全可靠的通信与互斥访问，同步虽然耗资源，但仍是需要的。</li>
+<li>避免过多的同步。因为容易产生死锁（互斥占有对方的锁）。</li>
+</ol>
+<h3 id="永远不要在循环外面调用wait">永远不要在循环外面调用wait</h3><ol>
+<li>循环模式使得wait操作的前后都能得到测试。</li>
+</ol>
+<h3 id="不要依赖于线程调度器">不要依赖于线程调度器</h3><ol>
+<li>不同的jvm，线程调度器的策略都不大相同。为了高可移植性应避免依赖线程调度器。</li>
+<li>yield方法的实现在不同jvm也大不相同，性能也不相同。</li>
+</ol>
+<h2 id="序列化">序列化</h2><h3 id="谨慎实现serializable">谨慎实现serializable</h3><ol>
+<li>一旦类发布，后期的修改将变得近乎不可能。</li>
+<li>序列化机制提供构造函数以外的创建对象的机制。反序列化要注意重写readResolve方法。</li>
+<li>为了继承而设计的类应该尽量少实现该接口。因为所有子类将背负序列化和反序列化的重任。</li>
+</ol>
+<h3 id="保护性地编写readObject（ObjectInputStream）方法">保护性地编写readObject（ObjectInputStream）方法</h3><ol>
+<li>对实参的有效性进行检查，必要时对参数进行保护性拷贝。因为恶意破坏者可能构造或修改输入流来伪造，反序列化出错误的对象。</li>
+</ol>
+<h3 id="readResolve方法">readResolve方法</h3><ol>
+<li>对于单例的序列化类很有必要实现。</li>
+<li>对于其他所有的实例受控的类也是必需的。</li>
+<li>方法修饰符，如果是final类则果断private，但如果是可变类，则需要提供子类继承。</li>
+</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://aceor.org/2015/03/29/《Effective-Java》读书笔记/" data-id="ci7xh2bfe0001vs6osdswwtmn" class="article-share-link">Share</a>
+      <a data-url="http://aceor.org/2015/03/29/《Effective-Java》读书笔记/" data-id="ci7xjnwpk0001h46oal4swahh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java经验谈/">java经验谈</a></li></ul>
