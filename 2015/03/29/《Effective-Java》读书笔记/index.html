@@ -129,11 +129,42 @@
 <li>不要把finalize方法当做是C++中的析构函数，java我们应该使用try-finally结构来进行相应的资源释放。</li>
 <li>明智的做法是通过显式的终止方法（close，cancel，flush等）。这个方法会给该实例加一’无用’的标志，下次重复访问将会报错。</li>
 </ol>
+<h2 id="对于所有对象都通用的方法">对于所有对象都通用的方法</h2><h3 id="在改写equals的时候需遵守通用约定">在改写equals的时候需遵守通用约定</h3><ol>
+<li>不需要覆写的情况：每个实例本质是唯一；不关心“逻辑相等”；父类实现了；类是私有的，调用不到。</li>
+<li>覆写的约定：自反性，对称性，传递性，一致性</li>
+<li>覆写的处方：使用等号检查“实参是否是指向对象的同一个引用”-&gt;使用instanceof检查“实参是否是正确类型”-&gt;把实参强转成正确类型-&gt;对类中每一个关键域进行比较。</li>
+</ol>
+<h3 id="改写equals时总要改写hashCode">改写equals时总要改写hashCode</h3><ol>
+<li>java规范约定：如果equals方法相等，则这两个对象的hashcode一定相同。</li>
+<li>约定的写法：把某个素数t放到result变量中；计算类中每一个关键域的hash码c,然后 result=result*t+c,循环计算完所有关键域；返回result。</li>
+</ol>
+<h3 id="慎用clone方法">慎用clone方法</h3><ol>
+<li>修改了一个非final类的clone方法，应该用super.clone()方法来获得该对象。</li>
+<li>注意深浅复制。深复制时要将步骤1中获得的对象的对象域进行重赋值。</li>
+<li>clone复制有时会变得相当复杂。如果不是必须，不建议使用。另外，可以通过提供拷贝构造函数或静态工厂来代替。</li>
+</ol>
+<p><code>public A(A a){}</code></p>
+<p><code>public static A newInstance(){}</code></p>
+<h2 id="类和接口">类和接口</h2><h3 id="使类和成员的可访问性能力最小化">使类和成员的可访问性能力最小化</h3><ol>
+<li>即使是final引用，指向可变对象或静态数组都是不建议的，很多时候都是安全漏洞的根源。</li>
+</ol>
+<h3 id="支持非可变性">支持非可变性</h3><ol>
+<li>不可变类的构成原则：不提供任何修改对象的方法；保证没有可被子类改写的方法；使所有的域都是final、私有的；保证对于任何可变组件的互斥访问，并且确保不能通过某方法获得该对象引用，且避免用户引用来初始化该域（构造函数，访问方法，readObject中使用保护性拷贝）</li>
+<li>非可变对象状态唯一，是线程安全的，不需要同步，可以被自由的共享。非可变类中的非final字段可以用于缓存（优良特性）。</li>
+<li>缺点：对于每一个不同的值都需要一个单独的对象</li>
+<li>非可变类形成final类的做法：类加final修饰；所有方法都加final修饰；构造函数私有化，并提供静态工厂方法。</li>
+</ol>
+<h3 id="组合优于继承">组合优于继承</h3><ol>
+<li>继承实现了代码重用，但是破坏了封装性，子类可以访问到甚至修改超类的属性。</li>
+<li>超类版本的改变（添加或更新方法）会严重影响子类的健壮性。</li>
+<li>使用继承的情况：满足is-a关系，且子类和超类在一个包下；父类是专门设计用来扩展继承的（如抽象类）</li>
+<li>绝大多数情况下，都应采用组合的方式（包装类）。</li>
+</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://aceor.org/2015/03/29/《Effective-Java》读书笔记/" data-id="ci7um604j0001os6od2x4shle" class="article-share-link">Share</a>
+      <a data-url="http://aceor.org/2015/03/29/《Effective-Java》读书笔记/" data-id="ci7xh04qd0001fk6oj88754q3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java经验谈/">java经验谈</a></li></ul>
