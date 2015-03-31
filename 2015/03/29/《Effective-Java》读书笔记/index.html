@@ -160,11 +160,29 @@
 <li>使用继承的情况：满足is-a关系，且子类和超类在一个包下；父类是专门设计用来扩展继承的（如抽象类）</li>
 <li>绝大多数情况下，都应采用组合的方式（包装类）。</li>
 </ol>
+<h3 id="要么专门为继承而设计，并给出说明文档，否则禁止继承">要么专门为继承而设计，并给出说明文档，否则禁止继承</h3><ol>
+<li>文档用来描述改写方法的自用性(即方法内部调用其他方法），也就是说明某些方法之间的联系，提醒使用小心改写。</li>
+<li>构造函数一定不能调用可被改写的方法。</li>
+<li>实现了serializable接口时，如果覆写了readResolve和writeReplace方法，那么这两个方法都应该是受保护的，允许子类自己覆写。</li>
+</ol>
+<h3 id="接口优于抽象类">接口优于抽象类</h3><ol>
+<li>接口不能实现方法；抽象类在继承显得很不灵活（要想成为抽象类定义的类型必须成为其子类）</li>
+<li>结合两者的优点——提供一个骨架实现类（即模板方法）。</li>
+<li>模拟多重继承——增加私有内部类，某些方法调用都抛给内部类对象（内部类也可继承骨架实现类）</li>
+<li>使用接口作为类型定义，因为抽象类型作为类型定义会受到单继承的限制</li>
+<li>接口可以构造出非层次结构的类型框架，更灵活</li>
+</ol>
+<h3 id="优先考虑静态成员类">优先考虑静态成员类</h3><ol>
+<li>嵌套类：匿名内部类，局部内部类，非静态内部类；静态成员类（技巧上，把它看成是静态成员。所以，可以访问外部类的所有静态成员。）</li>
+<li>非静态成员类的实例中隐含着一个外部类的实例引用，不能脱离外部引用而存在（典型有map中视图keyset,keyvalue）。</li>
+<li>私有静态成员类通常用来代表外围类的一个对象组件。</li>
+<li>匿名类的主要用法有创建函数对象，创建过程对象（thread，timetask），在一个静态工厂内部</li>
+</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://aceor.org/2015/03/29/《Effective-Java》读书笔记/" data-id="ci7xh04qd0001fk6oj88754q3" class="article-share-link">Share</a>
+      <a data-url="http://aceor.org/2015/03/29/《Effective-Java》读书笔记/" data-id="ci7xh2bfe0001vs6osdswwtmn" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java经验谈/">java经验谈</a></li></ul>
